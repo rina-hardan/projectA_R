@@ -1,10 +1,8 @@
-import dotenv from 'dotenv';
 import DB from './Config.js'; 
-dotenv.config();
 
 // שאילתות יצירת טבלאות
 const Users = `
-    CREATE TABLE IF NOT EXISTS users (
+  CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     username VARCHAR(100) UNIQUE NOT NULL,
@@ -13,69 +11,67 @@ const Users = `
 `;
 
 const Passwords = `
-      CREATE TABLE IF NOT EXISTS passwords (
-      user_id INT PRIMARY KEY,
-      password_hash VARCHAR(255) NOT NULL,
-      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-    );
+  CREATE TABLE IF NOT EXISTS passwords (
+    user_id INT PRIMARY KEY,
+    password_hash VARCHAR(255) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  );
 `;
 
 const Todos = `
-      CREATE TABLE IF NOT EXISTS todos (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        title VARCHAR(255) NOT NULL,
-        completed BOOLEAN DEFAULT false,
-        user_id INT,
-        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-      );
+  CREATE TABLE IF NOT EXISTS todos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    completed BOOLEAN DEFAULT false,
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  );
 `;
 
 const Posts = `
-      CREATE TABLE IF NOT EXISTS posts (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        title VARCHAR(255) NOT NULL,
-        content TEXT,
-        user_id INT,
-        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-      );
+  CREATE TABLE IF NOT EXISTS posts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT,
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  );
 `;
 
 const Comments = `
-   CREATE TABLE IF NOT EXISTS comments (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        content TEXT NOT NULL,
-        post_id INT,
-        user_id INT,
-        FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
-        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-      );
+  CREATE TABLE IF NOT EXISTS comments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    content TEXT NOT NULL,
+    post_id INT,
+    user_id INT,
+    FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  );
 `;
 
-// הרצת כל השאילתות בסדר הנכון
-export const initTables = async () => {
-  try {
-    await DB.query(Users);
-    console.log("✅ users table created.");
+DB.query(Users, (err) => {
+  if (err) console.error("❌ Error creating users table:", err);
+  else console.log("✅ users table created successfully.");
+});
 
-    await DB.query(Passwords);
-    console.log("✅ passwords table created.");
+DB.query(Passwords, (err) => {
+  if (err) console.error("❌ Error creating passwords table:", err);
+  else console.log("✅ passwords table created successfully.");
+});
 
-    await DB.query(Todos);
-    console.log("✅ todos table created.");
+DB.query(Todos, (err) => {
+  if (err) console.error("❌ Error creating todos table:", err);
+  else console.log("✅ todos table created successfully.");
+});
 
-    await DB.query(Posts);
-    console.log("✅ posts table created.");
+DB.query(Posts, (err) => {
+  if (err) console.error("❌ Error creating posts table:", err);
+  else console.log("✅ posts table created successfully.");
+});
 
-    await DB.query(Comments);
-    console.log("✅ comments Details table created.");
+DB.query(Comments, (err) => {
+  if (err) console.error("❌ Error creating comments table:", err);
+  else console.log("✅ comments table created successfully.");
+});
 
-    await DB.end(); 
-
-    console.log("📦 All tables created and connection closed.");
-
-  } catch (err) {
-    console.error("❌ Error creating tables:", err.message);
-  }
-};
-
-
+// DB.end();
