@@ -7,4 +7,5 @@ userRouter.get("/getAllUsers", usersController.getAllUsers);
 userRouter.get("/getUserById/:user_id", usersController.getUserById);
 userRouter.post("/addUser", usersController.addUser);
 
+
 export default userRouter;
