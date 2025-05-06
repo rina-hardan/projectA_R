@@ -2,54 +2,67 @@ import usersModel from "../models/usersModel.js";
 import bcrypt from "bcrypt";
 
 const usersController = {
-    getAllUsers: (req, res) => {
-        usersModel.getAllUsers((err, users) => {
-            if (err) return res.status(500).json({ error: "Database error" });
-            if (!users) return res.status(404).json({ error: "users not found" });
-            res.json(users);
-        });
-    },
-
-    getUserById: (req, res) => {
-        const { user_id } = req.params;
-        usersModel.getUserById(user_id, (err, user) => {
-            if (err) return res.status(500).json({ error: "Database error" });
-            if (!user) return res.status(404).json({ error: "user not found" });
-            res.json(user);
-        });
-    },
-
-    addUser: (req, res) => {
+    register: (req, res) => {
         const user = req.body;
         const { username, name, email, password } = user;
-
+    
         if (!name || !username || !email || !password) {
-            return res.status(400).json({ error: "יש למלא את כל השדות הנדרשים" });
+            return res.status(400).json({ error: "All fields are required" });
         }
-
+    
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ error: "Invalid email address" });
+        }
+    
+        if (password.length < 5) {
+            return res.status(400).json({ error: "Password must be at least 6 characters long" });
+        }
+    
         bcrypt.hash(password, 10, (err, hashedPassword) => {
             if (err) {
-                console.error("❌ שגיאה בהצפנת הסיסמה:", err);
-                return res.status(500).json({ error: "שגיאה בהצפנת הסיסמה" });
+                console.error("❌ Error hashing the password:", err);
+                return res.status(500).json({ error: "Error hashing the password" });
             }
-
+    
             const userToSave = {
                 name,
                 username,
                 email,
                 password: hashedPassword
             };
-
-            usersModel.addUser(userToSave, (err, result) => {
+    
+            usersModel.register(userToSave, (err, result) => {
                 if (err) {
-                    console.error("❌ שגיאה בהוספת המשתמש למסד:", err);
-                    return res.status(500).json({ error: "שגיאה בהוספת המשתמש" });
+                    console.error("❌ Error adding the user to the database:", err);
+                    return res.status(500).json({ error: "Error adding the user" });
                 }
+    
+                res.status(201).json({ message: "✅ User added successfully", userId: result.insertId });
+            });
+        });
+    },
+    login:(req, res) => {
+        const { username, password } = req.body;
 
-                res.status(201).json({ message: "✅ המשתמש נוסף בהצלחה", userId: result.insertId });
+        if (!username || !password) {
+            return res.status(400).json({ error: "All fields are required" });
+        }
+    
+        usersModel.getUserByUsername(username, (err, user) => {
+            if (err) return res.status(500).json({ error: "Database error" });
+            if (!user) return res.status(401).json({ error: "Invalid username or password" });
+    
+            bcrypt.compare(password, user.password, (err, isMatch) => {
+
+                if (err) return res.status(500).json({ error: `Error checking password${password,user.password}` });
+                if (!isMatch) return res.status(401).json({ error: "Invalid username or password" });
+                res.json({ message: "Login successful", user });
             });
         });
     }
+
+
 };
 
 export default usersController;

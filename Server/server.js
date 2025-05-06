@@ -8,7 +8,7 @@ import './DB/InitDB.js';
 
 // טעינת ראוטרים
 import userRouter from "./routers/usersRoutes.js";
-// import todos from "./routers/todosRoutes.js";
+ import todos from "./routers/todosRoutes.js";
 // import posts from "./routers/postsRoutes.js";
 // import comments from "./routers/commentsRoutes.js";
 
@@ -25,7 +25,7 @@ app.use(express.json()); // זה חשוב שיהיה לפני כל route שמש�
 
 // ראוטים
 app.use("/api/users", userRouter);
-// app.use('/api/todos', todos);
+ app.use('/api/todos', todos);
 // app.use("/api/posts", posts);
 // app.use("/api/comments", comments);
 

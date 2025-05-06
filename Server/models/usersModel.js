@@ -1,18 +1,7 @@
 import DB from "../DB/Config.js";
 
 const usersModel = {
-    getAllUsers: (callback) => {
-        DB.query("SELECT * FROM users", callback);
-    },
-
-    getUserById: (id, callback) => {
-        DB.query("SELECT * FROM users WHERE id=?", [id], (err, results) => {
-            if (err) return callback(err);
-            callback(null, results[0]);
-        });
-    },
-
-    addUser: (userData, callback) => {
+    register: (userData, callback) => {
         const { name, username, email, password } = userData;
 
         DB.query(
@@ -26,13 +15,29 @@ const usersModel = {
                 DB.query(
                     "INSERT INTO passwords (user_id, password_hash) VALUES (?, ?)",
                     [userId, password],
-                    (err2, result2) => {
+                    (err2) => {
                         if (err2) return callback(err2);
                         callback(null, { userId }); 
                     }
                 );
             }
         );
+    },
+    getUserByUsername: (username, callback) => {
+        const query = `
+            SELECT users.*, passwords.password_hash AS password
+            FROM users
+            JOIN passwords ON users.id = passwords.user_id
+            WHERE users.username = ?
+        `;
+        DB.query(query, [username], (err, results) => {
+            if (err) {
+                console.error("SQL ERROR:", err);
+                return callback(err);
+            }
+            if (results.length === 0) return callback(null, null);
+            callback(null, results[0]); 
+        });
     }
 };
 

@@ -39,14 +39,13 @@ const Posts = `
 `;
 
 const Comments = `
-  CREATE TABLE IF NOT EXISTS comments (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    content TEXT NOT NULL,
-    post_id INT,
-    user_id INT,
-    FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-  );
+CREATE TABLE IF NOT EXISTS comments (
+   id INT PRIMARY KEY,
+   post_id INT NOT NULL,
+   name VARCHAR(255) NOT NULL,
+   email VARCHAR(255) NOT NULL,
+   body TEXT NOT NULL
+);
 `;
 
 DB.query(Users, (err) => {
