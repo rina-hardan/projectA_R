@@ -4,41 +4,72 @@ const postsController = {
     getAllPosts: (req, res) => {
         postsModel.getAllPosts((err, posts) => {
             if (err) return res.status(500).json({ error: "Database error" });
-            if (!posts) return res.status(404).json({ error: "posts not found" });
+            if (!posts) return res.status(404).json({ error: "Posts not found" });
             res.json(posts);
         });
     },
 
-    getPostByUserId: (req, res) => {
+    getPostsByUserId: (req, res) => {
         const { user_id } = req.params;
-        postsModel.getPostByUserId(user_id, (err, post) => {
+        postsModel.getPostsByUserId(user_id, (err, post) => {
             if (err) return res.status(500).json({ error: "Database error" });
-            if (!post) return res.status(404).json({ error: "post not found" });
+            if (post.length === 0) return res.status(404).json({ error: "Post not found" });
             res.json(post);
         });
     },
 
     addPost: (req, res) => {
-        const post = req.body;
-        const { title, content, user_id } = post;
+        const { title, content } = req.body;
+        const { user_id } = req.params;
 
-        if (!title || !content || !user_id ) {
-            return res.status(400).json({ error: "יש למלא את כל השדות הנדרשים" });
+        if (!title || !content) {
+            return res.status(400).json({ error: "All required fields must be filled" });
         }
 
         const postToSave = {
             title,
             content,
-            user_id
+            user_id: parseInt(user_id)
         };
 
-        postsModel.addTodo(postToSave, (err, result) => {
+        postsModel.addPost(postToSave, (err, result) => {
             if (err) {
-                console.error(" שגיאה בהוספת הפוסט למסד:", err);
-                return res.status(500).json({ error: "שגיאה בהוספת הפוסט" });
+                console.error("Error adding the post to the database:", err);
+                return res.status(500).json({ error: "Error adding the post" });
             }
 
-            res.status(201).json({ message: " הפוסט נוסף בהצלחה", id: result.insertId });
+            res.status(201).json({ message: "Post added successfully", id: result.insertId });
+        });
+    },
+
+    updatePost: (req, res) => {
+        const { post_id } = req.params;
+        const { title, content } = req.body;
+    
+        if (!title && !content) {
+            return res.status(400).json({ error: "At least one field (title or content) must be provided" });
+        }
+    
+        postsModel.updatePost(post_id, { title, content }, (err, result) => {
+            if (err) {
+                console.error("Error updating the post:", err);
+                return res.status(500).json({ error: "Error updating the post" });
+            }
+    
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ error: "Post not found" });
+            }
+    
+            res.json({ message: "Post updated successfully" });
+        });
+    },
+    deletePost: (req, res) => {
+        const { post_id } = req.params; 
+    
+        postsModel.deletePost(post_id, (err, result) => {
+            if (err) return res.status(500).json({ error: "Database error" });
+            if (!result) return res.status(404).json({ error: "No post found" }); 
+            res.json(result);
         });
     }
 };

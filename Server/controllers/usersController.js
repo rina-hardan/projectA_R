@@ -21,7 +21,7 @@ const usersController = {
     
         bcrypt.hash(password, 10, (err, hashedPassword) => {
             if (err) {
-                console.error("❌ Error hashing the password:", err);
+                console.error("Error hashing the password:", err);
                 return res.status(500).json({ error: "Error hashing the password" });
             }
     
@@ -34,11 +34,11 @@ const usersController = {
     
             usersModel.register(userToSave, (err, result) => {
                 if (err) {
-                    console.error("❌ Error adding the user to the database:", err);
+                    console.error("Error adding the user to the database:", err);
                     return res.status(500).json({ error: "Error adding the user" });
                 }
     
-                res.status(201).json({ message: "✅ User added successfully", userId: result.insertId });
+                res.status(201).json({ message: "User added successfully", userId: result.insertId });
             });
         });
     },
