@@ -13,26 +13,10 @@ export default function Todos() {
     const [todos, setTodos] = useState([]);
     const [message, setMessage] = useMessage("");
     const [title, setTitle] = useState("");
-    const addTodoRefs = useRef({});
     const [completed, setCompleted] = useState(false);
     
     const sortSelectRef = useRef(null);
     const [isAdding, setIsAdding] = useState(false);
-
-    
-    // async function fetchTodos() {
-    //     const { data, status } = await sendRequest(todos/getAllTodosByUserId/${currentUser.id});
-    //     if (status === FAILED) {
-    //         setMessage("Failed getting todos.");
-    //         return;
-    //     }
-    //     if (status === NOT_FOUND || !data || data.length === 0) {
-    //         setMessage("No todos. Click + to add.");
-    //         setTodos([]);
-    //         return;
-    //     }
-    //     setTodos(data);
-    // }
 
     useEffect(() => {
         fetchTodos(`todos/getAllTodosByUserId/${currentUser.id}`);
@@ -55,20 +39,32 @@ export default function Todos() {
     }
 
     async function handleAddTodo() {
+
+        if (!title) {
+            setMessage("Please fill in the title.");
+            return;
+        }
+        if (completed === undefined) {
+            setMessage("Please select if the todo is completed.");
+            return;
+        }
         const newTodo = {
-            title: addTodoRefs.current.title.value,
-            completed: addTodoRefs.current.completed.checked,
-            userId: currentUser.id
+            title,
+            completed
         };
-        const { data, status } = await addEntity("todos", newTodo);
-        if (status === SUCCESS) {
+        
+        const { data, status } = await sendRequest({ method: 'POST', url: `/todos/addTodo/${currentUser.id}`, body: newTodo });
+       console.log("Response from adding todo:", data, status);
+        if (status === 'SUCCESS') {
             setMessage("Todo added successfully!");
             setTodos(prev => [...prev, data]);
             setIsAdding(false);
+            setTitle(""); // ניקוי השדות אחרי הוספה
+            setCompleted(false);
         } else {
             setMessage("Failed to add todo.");
         }
-    }
+    }    
 
     return (
         <div className={styles.todosWrapper}>
@@ -97,17 +93,20 @@ export default function Todos() {
             /> */}
 
             <Create
-                addRefs={addTodoRefs}
+                title={title}      
+                setTitle={setTitle}
+                type="text"
                 isAdding={isAdding}
                 setIsAdding={setIsAdding}
                 handleAdd={handleAddTodo}
             >
                 <label className={styles.checkboxLabel}>
-                    <input
-                        type="checkbox"
-                        className={styles.checkboxInput}
-                        ref={el => (addTodoRefs.current.completed = el)}
-                    />
+                <input
+                    type="checkbox"
+                    className={styles.checkboxInput}
+                    checked={completed}
+                    onChange={e => setCompleted(e.target.checked)}
+                />
                     <span>Is completed?</span>
                 </label>
             </Create>

@@ -41,7 +41,7 @@ export default function Login() {
         if (data && data.user) {
             localStorage.setItem("currentUser", JSON.stringify(data.user));
             setCurrentUser(data.user);
-            navigate(`/users/${data.user.id}/Home`);
+            navigate(`/users/${data.user.username}/Home`);
           } else {
             setMessage("User does not exist, please register");
           }
