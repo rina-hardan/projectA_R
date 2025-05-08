@@ -1,0 +1,64 @@
+/* Comments.module.css */
+
+.commentsContainer {
+    display: flex; /* מאפשר יישור אלמנטים */
+    flex-direction: column; /* מסדר את האלמנטים אנכית */
+    gap: 100px; /* רווח בין התגובות */
+    padding: 10px;
+    background: linear-gradient(45deg, #222, #333);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    max-width: 90%;
+    margin: 10px auto;
+}
+
+
+.commentBox {
+    background: #1e1e1e;
+    padding: 10px;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.commentBox:hover {
+    background: #2a2a2a;
+    transform: scale(1.03);
+}
+
+.commentText {
+    font-size: 0.95rem;
+    color: #eee;
+    text-align: left;
+    margin: 5px 0;
+}
+
+.commentId {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.commentButtons {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    justify-content: flex-end;
+}
+
+.commentButtons button {
+    background: #444;
+    border: none;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.commentButtons button:hover {
+    background: #555;
+}

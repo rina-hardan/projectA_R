@@ -1,0 +1,94 @@
+/* Home.css */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+
+.Home {
+    display: flex;
+    flex-direction: column;
+    background-color: #333;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    align-items: center;
+    margin: 3vh 2vw;
+}
+
+.header {
+    padding: 20px;
+    text-align: center;
+    font-size: 2em;
+    font-weight: bold;
+    background: linear-gradient(45deg, #ff00cc, #3333ff);
+    color: white;
+    text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.6);
+    width: 100%;
+}
+
+main {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%; /* מתפרש על כל הרוחב */
+    padding: 20px; /* רווח מסביב למיין */
+    gap: 20px; /* רווח בין nav ל-div */
+}
+
+nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    background-color: #222;
+    padding: 20px;
+    flex: 0 0 250px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.link {
+    padding: 15px 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: white;
+    background-color: black;
+    border: 3px solid;
+    border-image-slice: 1;
+    border-image-source: linear-gradient(45deg, #ff00cc, #3333ff);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-align: center;
+    width: 80%;
+}
+
+.link:hover {
+    color: #ff00cc;
+    box-shadow: 0px 0px 15px 4px rgba(255, 0, 204, 0.5);
+    border-image-source: linear-gradient(45deg, #3333ff, #ff00cc);
+    transform: scale(1.05);
+}
+
+.context {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    background-color: #444;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    color: white;
+    font-size: 1.5em;
+    text-align: center;
+    overflow-y: auto;
+}
+
+footer {
+    text-align: center;
+    padding: 15px;
+    font-size: 1em;
+    background: linear-gradient(45deg, #3333ff, #ff00cc);
+    color: white;
+    text-shadow: 0px 0px 4px rgba(255, 255, 255, 0.6);
+    width: 100%;
+}

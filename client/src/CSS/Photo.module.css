@@ -1,0 +1,70 @@
+/* CSS עבור photo.module.css */
+.photoContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin: 20px auto;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.photoContainer:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.photoButtons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.photoButtons button {
+    background: black;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.photoButtons button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.photoButtons button:hover:not(:disabled) {
+    background: #333;
+}
+
+.photoButtons button:active:not(:disabled) {
+    transform: scale(0.95);
+}
+
+
+.photoButtons img {
+    width: 30px;
+    height: 30px;
+}
+
+.photoTitle {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin: 10px 0;
+    text-align: center;
+}
+
+.photoThumbnail {
+    border-radius: 8px;
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+}

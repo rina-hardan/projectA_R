@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 400px;
+    margin: auto;
+    padding: 30px;
+}
+
+.form-container input {
+    width: 100%;
+    margin: 5px 0;
+    padding: 10px;
+    border: 3px solid transparent;
+    border-radius: 8px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #444;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+    border-color: rgba(255, 0, 204, 0.5);
+
+}
+
+.form-container input::placeholder {
+    color: #bbb;
+}
+
+.form-container input:focus {
+    border-color: #ff00cc;
+    box-shadow: 0 0 5px rgba(255, 0, 204, 0.5);
+    outline: none;
+}

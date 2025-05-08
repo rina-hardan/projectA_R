@@ -1,0 +1,345 @@
+.postBox {
+    background: #ffffff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 300px; /* גודל מתאים לפוסט */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: background 0.3s, transform 0.3s;
+    margin: 10px;
+    gap: 10px;
+    cursor: pointer;
+}
+
+
+/* אזור הכפתורים */
+.postButtons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.postButtons button,.postButton {
+    background: black;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.postButtons button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.postButtons button:hover:not(:disabled) {
+    background: #333;
+}
+
+.postButtons button:active:not(:disabled) {
+    transform: scale(0.95);
+}
+
+/* טקסט הפוסט */
+.postText {
+    margin: 10px 0;
+    text-align: left;
+    width: 100%;
+}
+
+.postText strong {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.postTitle {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 5px 0;
+    color: black;
+    text-align: center;
+}
+
+.postDescription {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: #555;
+    text-align: center;
+    margin-top: 5px;
+}
+
+/* שדה טקסט */
+.textpost {
+    width: 90%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    margin: 5px 0;
+    color: black;
+}
+
+.textpost:focus {
+    outline: none;
+    border-color: #ae00ff;
+}
+
+/* הודעות */
+.message {
+    text-align: center;
+    color: #ff4d4d;
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+/* אזור התגובות */
+.commentsSection {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    align-items: center;
+}
+
+
+.commentsSection button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background-color: #ae00ff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.commentsSection button:hover {
+    background: #8a00d4;
+}
+
+.commentsSection button:active {
+    transform: scale(0.95);
+}
+
+.addPostButton {
+    background: #ff00cc;
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    font-size: 1.5em;
+    font-weight: bold;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.addPostButton:hover, .undoButton:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 10px rgba(255, 0, 204, 0.5);
+}
+
+.addPostForm {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    background: #333;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.textInput {
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    transition: border-color 0.3s;
+}
+
+.textInput:focus {
+    outline: none;
+    border-color: #ff00cc;
+}
+
+.savePostButton {
+    padding: 10px 20px;
+    font-size: 1em;
+    font-weight: bold;
+    color: white;
+    background-color: black;
+    border: 3px solid;
+    border-image-slice: 1;
+    border-image-source: linear-gradient(45deg, #ff00cc, #3333ff);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.savePostButton:hover {
+    color: #ff00cc;
+    box-shadow: 0px 0px 15px 4px rgba(255, 0, 204, 0.5);
+}
+
+/* תצוגת הפוסט המוגדל */
+.postBox {
+    background: #ffffff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    margin: 10px auto;
+    transition: all 0.3s ease;
+}
+
+.fullscreenPost {
+    position: fixed;
+    top: 5%;
+    left: 5%;
+    right: 5%;
+    width: 70%;
+    height: 70%;
+    background: linear-gradient(135deg, #f0f0f0, #ffffff);
+    z-index: 1000;
+    padding: 30px;
+    box-shadow: 0 100px 100px rgba(0, 0, 0, 0.7);
+    overflow-y: auto;
+}
+
+.postButtons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.fullscreenPostButtons {
+    justify-content: flex-start;
+    gap: 15px;
+    margin-bottom: 20px;
+    font-size: 70px;
+
+}
+
+.postText {
+    font-size: 1rem;
+    color: #333;
+}
+
+.fullscreenPostText {
+    font-size: 1.5rem;
+    line-height: 1.8;
+    color: #111;
+}
+
+.postTitle {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.fullscreenPostTitle {
+    font-size: 2rem;
+    color: #000000;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.postDescription {
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.fullscreenPostDescription {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.postButton {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #000000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.fullscreenPostButton {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    background-color: #000000;
+}
+
+.addPostButton {
+    background-color: #a528a7;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.fullscreenAddPostButton {
+    width: 50px;
+    height: 50px;
+    font-size: 2rem;
+}
+
+.addPostForm {
+    margin-top: 20px;
+}
+
+.fullscreenAddPostForm {
+    margin-top: 40px;
+    font-size: 1.5rem;
+}
+
+.textInput {
+    padding: 10px;
+    width: 100%;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.fullscreenTextInput {
+    padding: 15px;
+    font-size: 1.2rem;
+    border: 2px solid #007bff;
+}
+
+.commentsSection {
+    margin-top: 20px;
+}
+
+.fullscreenCommentsSection {
+    margin-top: 40px;
+}
+

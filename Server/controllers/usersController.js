@@ -38,7 +38,7 @@ const usersController = {
                     return res.status(500).json({ error: "Error adding the user" });
                 }
     
-                res.status(201).json({ message: "User added successfully", userId: result.insertId });
+                res.status(201).json({ message: "User added successfully", userId: result.userId });
             });
         });
     },

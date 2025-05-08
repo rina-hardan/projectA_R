@@ -1,0 +1,40 @@
+.updateContainer {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px auto;
+    text-align: left;
+    max-width: 600px;
+}
+
+.updateInput{
+    height: 7rem;
+    padding: 10px;
+    font-size: 1em;
+    width: 90%;
+    transition: border-color 0.3s;
+    border: 2px solid; /* עובי המסגרת */
+    border-image: linear-gradient(45deg, #ff6ec4, #7873f5) 1; /* מעבר צבעים למסגרת */
+    border-radius: 10px; /* פינות מעוגלות */
+}
+
+.updateInput:focus{
+    outline: none;
+    border-color: #ff00cc;
+}
+
+.saveButton {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.saveButton:hover {
+    background-color: rgb(42, 42, 42);
+}

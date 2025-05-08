@@ -1,0 +1,82 @@
+/* Todos.module.css */
+
+
+
+.todoBox {
+    background: #ffffff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: background 0.3s, transform 0.3s;
+    min-height: 150px;
+    width: 150px;
+    
+}
+
+.todoBox:hover {
+    background: #e4e4e4;
+    transform: scale(1.1);
+}
+
+.todoLabel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.todoText {
+    font-size: 0.85rem;
+    line-height: 1.2;
+    word-wrap: break-word;
+    text-align: center;
+    color: black !important; /* טקסט שחור תמיד */
+}
+
+.todoCheckbox {
+    width: 20px !important;
+    height: 20px !important;
+    cursor: pointer;
+    accent-color: #ae00ff; /* צבע מותאם ל-checkbox */
+    border: none;
+    outline: none;
+}
+
+.todoBox div {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    margin-bottom: 5px;
+    flex-wrap: wrap;
+}
+
+.todoBox button {
+    background:black;
+    border: none;
+    color: white;
+    padding: 5px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.todoBox button:hover {
+    background: black;
+}
+
+.errorMessage {
+    color: #ff4d4d;
+    font-size: 0.9rem;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.textTodo{
+    color: black;
+    margin-top: 0;
+    font-size: 15px;
+}
