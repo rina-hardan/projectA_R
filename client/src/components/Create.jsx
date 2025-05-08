@@ -1,6 +1,6 @@
 import styles from '../CSS/Create.module.css'
 import useMessage from '../hooks/useMessage';
-export default function Create({ handleAdd, addRefs, children, isAdding, setIsAdding }) {
+export default function Create({ handleAdd, title, setTitle, children, isAdding, setIsAdding }) {
     const [message,setMessage]=useMessage("")
     return (
         <div className={styles.addTodoContainer}>
@@ -12,9 +12,9 @@ export default function Create({ handleAdd, addRefs, children, isAdding, setIsAd
                         Title:
                         <input
                             placeholder="Title"
-                            type="textarea"
                             className={styles.textInput}
-                            ref={el => (addRefs.current.title = el)}
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
                         />
                     </label>
                     {children}
@@ -23,10 +23,10 @@ export default function Create({ handleAdd, addRefs, children, isAdding, setIsAd
                         className={styles.saveButton}
                         type="button"
                         onClick={()=>{
-                            if (Object.values(addRefs.current).some(input => input.value == "")) {
-                                setMessage("Please fiil all the details");
+                            if (title.trim() === "") {
+                                setMessage("Please fill in the title.");
                                 return;
-                            }
+                            }                            
                             handleAdd()
                         }}
                     >

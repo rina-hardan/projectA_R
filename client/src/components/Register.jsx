@@ -53,7 +53,7 @@ export default function Register() {
         const fullUserData = { ...newUser, id: data.userId };
         localStorage.setItem("currentUser", JSON.stringify(fullUserData));
         setCurrentUser(fullUserData);
-        navigate(`/users/${data.userId}/Home`);
+        navigate(`/users/${data.username}/Home`);
     }
 
     console.log(formData)
