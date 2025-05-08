@@ -9,8 +9,8 @@ export const sendRequest = async ({ method, url, params = {}, body = null, heade
   const config = {
     method,
     url: `${BASE_URL}${url}`,
-    params,  // אם יש פרמטרים לשאילתא
-    data: body,  // אם יש גוף לבקשה
+    params, 
+    data: body, 
     headers: {
       'Content-Type': 'application/json',
       ...headers,

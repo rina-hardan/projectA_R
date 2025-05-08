@@ -27,16 +27,16 @@ export default function Post({ post, configPost, isAllPosts }) {
         });
         handleDeleteEntity(configPost, post.id, `posts/${post.id}`)
     }
-
     return (
+      
         <div className={`${styles.postBox} ${isSelected && styles.fullscreenPost}`}>
             <div className={`${styles.postButtons} ${isSelected && styles.fullscreenPostButtons}`}>
                 <button
-                    disabled={isAllPosts && currentUser.id !== post.userId}
+                    disabled={isAllPosts && currentUser.id !== post.user_id}
                     onClick={handleDeletePost}>
                     <img width="30px" height="30px" src="https://cdn-icons-png.flaticon.com/128/5305/5305859.png" alt="Recycle Bin" />
                 </button>
-                <button disabled={isAllPosts && currentUser.id !== post.userId} onClick={() => setIsEditing(true)}>✎</button>
+                <button disabled={isAllPosts && currentUser.id !== post.user_id} onClick={() => setIsEditing(true)}>✎</button>
                 <button onClick={()=>setIsSelected(!isSelected)}>{isSelected ? "❌" : "⤢"}</button>
             </div>
             <div className={`${styles.postText} ${isSelected && styles.fullscreenPostText}`}>

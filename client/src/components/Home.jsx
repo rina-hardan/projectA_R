@@ -15,7 +15,6 @@ export default function Home() {
                     <Link to="Info" className={styles.link}>Info</Link>
                     <Link to="Todos" className={styles.link}>Todos</Link>
                     <Link to="Posts" className={styles.link}>Posts</Link>
-                    <Link to="Albums" className={styles.link}>Albums</Link>
                     <button className={styles.link} onClick={() => {
                         localStorage.removeItem('currentUser')
                         setCurrentUser(null)
@@ -26,7 +25,8 @@ export default function Home() {
                     <Outlet />
                 </div>
             </main>
-            <footer className={styles.footer}>כל הזכויות שמורות לרינה וחנה</footer>
+            <footer className={styles.footer}>כל הזכויות שמורות לרינה ואיילת</footer>
         </div>
     )
 }
+
