@@ -1,9 +1,10 @@
 import styles from '../CSS/Edit.module.css';
 import { useState } from 'react';
-import { handleUpdateEntity } from '../CRUDS';
 
-export default function Edit({ config, setIsEditing, entity, fieldNames }) {
+export default function Edit({setIsEditing, entity, fieldNames ,handleUpdate}) {
     const [editEntity, setEditEntity] = useState(entity);
+console.log(entity);
+console.log(editEntity);
 
     function handleUpdateAttribute(e, attribute) {
         e.preventDefault();
@@ -12,7 +13,7 @@ export default function Edit({ config, setIsEditing, entity, fieldNames }) {
 
     function saveEntity(e) {
         e.preventDefault();
-        handleUpdateEntity(config, entity.id, editEntity);
+        handleUpdate(editEntity);
         setIsEditing(false);
     }
 

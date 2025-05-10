@@ -1,13 +1,9 @@
 import { useContext, useState, useEffect } from 'react';
-import { useContext, useState, useEffect } from 'react';
 import { CurrentUserContext } from '../App';
 import Post from './Post';
-// import Search from './Search.jsx';
-// import Search from './Search.jsx';
 import Create from './Create.jsx';
 import styles from "../CSS/Posts.module.css";
 import useMessage from '../hooks/useMessage.jsx';
-import { sendRequest } from '../DB_API.jsx';
 import { sendRequest } from '../DB_API.jsx';
 
 export default function Posts() {
@@ -48,7 +44,6 @@ export default function Posts() {
         };
 
         const { data, status } = await sendRequest({ method: 'POST', url: `/posts/addPost/${currentUser.id}`, body: newPost });
-
         if (status === 'FAILED') {
             setLocalMessage("Failed adding post.");
             return;
@@ -58,9 +53,14 @@ export default function Posts() {
         setIsAdding(false);
         setTitle("");
         setContent("");
-
+        const postAdded = {
+           user_id:currentUser.id,
+            title,
+            content: content,
+            id:data.id
+        };
         if (!isAllPosts) {
-            setPosts(prevPosts => [data, ...prevPosts]); 
+            setPosts(prevPosts => [postAdded, ...prevPosts]); 
         }
         else {
             fetchPosts(`posts/getAllPosts`);
@@ -83,7 +83,6 @@ export default function Posts() {
                 {!isAllPosts && (
                     <button className={styles.toggleButton} onClick={() => {
                         fetchPosts(`posts/getAllPosts`);
-                        fetchPosts(`posts/getAllPosts`);
                         setIsAllPosts(true);
                     }}>
                         All posts
@@ -91,7 +90,6 @@ export default function Posts() {
                 )}
                 {isAllPosts && (
                     <button className={styles.toggleButton} onClick={() => {
-                        fetchPosts(`posts/getPostsByUserId/${currentUser.id}`);
                         fetchPosts(`posts/getPostsByUserId/${currentUser.id}`);
                         setIsAllPosts(false);
                     }}>
@@ -126,8 +124,7 @@ export default function Posts() {
             <div className={styles.postsList}>
                 {posts &&
                     posts.map((post, i) => (
-                        <Post key={i} post={post} configPost={{ entity: "posts", currentEntity: currentUser }} isAllPosts={isAllPosts} />
-                        <Post key={i} post={post} configPost={{ entity: "posts", currentEntity: currentUser }} isAllPosts={isAllPosts} />
+                        <Post key={post.id} post={post} setPosts={setPosts} isAllPosts={isAllPosts}  setGlobalMessage={setMessage} />
                     ))}
             </div>
         </div>

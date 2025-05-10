@@ -17,35 +17,39 @@ export default function Login() {
     const [message, setMessage] = useMessage("");
     const navigate = useNavigate();
 
-    async function handleFormSubmitted() {
-        setMessage("");
-        const { userName, password } = formData;
+  async function handleFormSubmitted() {
+    setMessage("");
+    const { userName, password } = formData;
 
-        if (!userName || !password) {
-            setMessage("Please fill all the details");
-            return;
-        }
-       
-
-        const { data, status } = await sendRequest({
-            method: 'POST',
-            url: '/users/login',  
-            body: { username:userName,password },  
-        });
-      
-        if (status === 'FAILED') {
-            setMessage("Failed doing get request");
-            return;
-        }
-
-        if (data && data.user) {
-            localStorage.setItem("currentUser", JSON.stringify(data.user));
-            setCurrentUser(data.user);
-            navigate(`/users/${data.user.username}/Home`);
-          } else {
-            setMessage("User does not exist, please register");
-          }
+    if (!userName.trim() || !password.trim()) {
+        setMessage("Please fill all the details");
+        return;
     }
+
+    if (password.length < 5) {
+        setMessage("Password must be at least 6 characters long");
+        return;
+    }
+
+    const { data, status } = await sendRequest({
+        method: 'POST',
+        url: '/users/login',
+        body: { username: userName, password },
+    });
+
+    if (status === 'FAILED') {
+        setMessage("Failed to connect to the server");
+        return;
+    }
+
+    if (data && data.user) {
+        localStorage.setItem("currentUser", JSON.stringify(data.user));
+        setCurrentUser(data.user);
+        navigate(`/users/${data.user.username}/Home`);
+    } else {
+        setMessage("Invalid username or password");
+    }
+}
 
     return (
         <div className="login-container">

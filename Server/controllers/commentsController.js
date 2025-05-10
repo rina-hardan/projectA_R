@@ -46,37 +46,33 @@ const commentsController = {
         });
     },
     updateComment: (req, res) => {
-        const { comment_id } = req.params;
-        const { post_id, name, email, body } = req.body;
+        const { commentId } = req.params;
+        const { email, ...updateFields } = req.body;
 
-        if (!post_id) {
-            return res.status(400).json({ error: "post_id is required" });
-        }
+        if (!email) return res.status(400).json({ error: "Email is required for authorization" });
 
-        commentsModel.getCommentById(comment_id, (err, existingComment) => {
+        commentsModel.getCommentById(commentId, (err, existingComment) => {
             if (err) return res.status(500).json({ error: "Database error" });
             if (!existingComment) return res.status(404).json({ error: "Comment not found" });
 
-            if (existingComment.post_id !== post_id) {
+            if (existingComment.email !== email) {
                 return res.status(403).json({ error: "You are not authorized to update this comment" });
             }
 
-            const updateFields = { name, email, body };
             const filteredFields = Object.fromEntries(
-                Object.entries(updateFields).filter(([_, value]) => value)
+                Object.entries(updateFields).filter(([_, value]) => value !== undefined)
             );
 
             if (Object.keys(filteredFields).length === 0) {
                 return res.status(400).json({ error: "No fields provided to update" });
             }
 
-            commentsModel.updateComment(comment_id, filteredFields, (err) => {
+            commentsModel.updateComment(commentId, filteredFields, (err) => {
                 if (err) return res.status(500).json({ error: "Failed to update comment" });
                 res.json({ message: "Comment updated successfully" });
             });
         });
     }
-
 };
 
 export default commentsController;

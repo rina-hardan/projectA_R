@@ -6,7 +6,7 @@ const postsModel = {
     },
 
     getPostsByUserId: (userId, callback) => {
-        DB.query("SELECT * FROM posts WHERE user_id=?", [userId], (err, results) => {
+        DB.query("SELECT * FROM posts WHERE user_id=? ORDER BY id", [userId], (err, results) => {
             if (err) return callback(err);
             callback(null, results);
         });
@@ -56,8 +56,22 @@ const postsModel = {
                 return callback(null, { message: "post deleted successfully" });
             }
         );
+    },
+   searchPost: (type, value, callback) => {
+        const allowedTypes = ["post_id", "user_id"];
+
+        if (!allowedTypes.includes(type)) {
+            return callback(new Error("Invalid search type"));
+        }
+
+        const sql = `SELECT * FROM comments WHERE ${type} = ?`;
+
+        DB.query(sql, [value], (err, results) => {
+            if (err) return callback(err);
+            callback(null, results);
+        });
     }
-    
 };
+    
 
 export default postsModel;

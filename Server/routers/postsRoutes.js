@@ -7,7 +7,8 @@ postRouter.get("/getAllPosts", postsController.getAllPosts);
 postRouter.get("/getPostsByUserId/:user_id", postsController.getPostsByUserId);
 postRouter.post("/addPost/:user_id", postsController.addPost);
 postRouter.put("/updatePost/:post_id", postsController.updatePost);
-postRouter.delete("/deletePost/:post_id", postsController.deletePost);
+postRouter.delete("/deletePost/:id", postsController.deletePost);
+postRouter.post("/search", postsController.searchPost);
 
 
 export default postRouter;

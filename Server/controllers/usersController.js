@@ -42,25 +42,32 @@ const usersController = {
             });
         });
     },
-    login:(req, res) => {
-        const { username, password } = req.body;
+   login: (req, res) => {
+    const { username, password } = req.body;
 
-        if (!username || !password) {
-            return res.status(400).json({ error: "All fields are required" });
-        }
-    
-        usersModel.getUserByUsername(username, (err, user) => {
-            if (err) return res.status(500).json({ error: "Database error" });
-            if (!user) return res.status(401).json({ error: "Invalid username or password" });
-    
-            bcrypt.compare(password, user.password, (err, isMatch) => {
-
-                if (err) return res.status(500).json({ error: `Error checking password${password,user.password}` });
-                if (!isMatch) return res.status(401).json({ error: "Invalid username or password" });
-                res.json({ message: "Login successful", user });
-            });
-        });
+    if (!username || !password) {
+        return res.status(400).json({ error: "All fields are required" });
     }
+
+    if (password.length < 6) {
+        return res.status(400).json({ error: "Password must be at least 6 characters long" });
+    }
+
+    usersModel.getUserByUsername(username, (err, user) => {
+        if (err) return res.status(500).json({ error: "Database error" });
+        if (!user) return res.status(401).json({ error: "Invalid username or password" });
+
+        bcrypt.compare(password, user.password, (err, isMatch) => {
+            if (err) return res.status(500).json({ error: "Error checking password" });
+            if (!isMatch) return res.status(401).json({ error: "Invalid username or password" });
+
+            const userWithoutPassword = { ...user };
+            delete userWithoutPassword.password;
+
+            res.json({ message: "Login successful", user: userWithoutPassword });
+        });
+    });
+}
 };
 
 export default usersController;

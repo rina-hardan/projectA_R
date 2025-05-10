@@ -1,13 +1,13 @@
 import todosModel from "../models/todosModel.js";
 
 const todosController = {
-
     getAllTodosByUserId: (req, res) => {
         const { user_id } = req.params;
-        todosModel.getAllTodosByUserId(user_id, (err, todo) => {
+        const { sortBy } = req.query; // קבלת הפרמטר sortBy מתוך ה-query
+
+        todosModel.getAllTodosByUserId(user_id, sortBy, (err, todos) => {
             if (err) return res.status(500).json({ error: "Database error" });
-            if (!todo) return res.status(404).json({ error: "Todo not found" });
-            res.json(todo);
+            res.json(todos);
         });
     },
 
@@ -59,7 +59,7 @@ const todosController = {
 
             res.json({ message: "Todo updated successfully" });
         });
-    }
+    },
 };
 
 export default todosController;

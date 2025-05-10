@@ -4,7 +4,7 @@ import Sort from "./Sort.jsx";
 // import Search from "./Search.jsx";
 import Create from "./Create.jsx";
 import useMessage from "../hooks/useMessage.jsx";
-import { getById, addEntity, SUCCESS, NOT_FOUND, FAILED, sendRequest } from '../DB_API.jsx';
+import { SUCCESS, NOT_FOUND, FAILED, sendRequest } from '../DB_API.jsx';
 import styles from "../CSS/Todos.module.css";
 import Todo from "./Todo";
 
@@ -14,16 +14,15 @@ export default function Todos() {
     const [message, setMessage] = useMessage("");
     const [title, setTitle] = useState("");
     const [completed, setCompleted] = useState(false);
-    
-    const sortSelectRef = useRef(null);
+    const [sortOption, setSortOption] = useState("id");
     const [isAdding, setIsAdding] = useState(false);
 
     useEffect(() => {
-        fetchTodos(`todos/getAllTodosByUserId/${currentUser.id}`);
+        fetchTodos(`/todos/getAllTodosByUserId/${currentUser.id}`);
     }, []);
 
     const fetchTodos = async (url) => {
-        const { data, status } = await sendRequest({ method: 'GET', url: `/${url}` });
+        const { data, status } = await sendRequest({ method: 'GET', url: `${url}` });
         if (status === 'FAILED') {
             setMessage("Failed getting todos.");
             setTodos([]);
@@ -36,10 +35,9 @@ export default function Todos() {
         }
         setMessage("");
         setTodos(data);
-    }
+    };
 
     async function handleAddTodo() {
-
         if (!title) {
             setMessage("Please fill in the title.");
             return;
@@ -52,19 +50,53 @@ export default function Todos() {
             title,
             completed
         };
-        
-        const { data, status } = await sendRequest({ method: 'POST', url: `/todos/addTodo/${currentUser.id}`, body: newTodo });
-       console.log("Response from adding todo:", data, status);
-        if (status === 'SUCCESS') {
+
+        const { data, status } = await sendRequest({
+            method: 'POST',
+            url: `/todos/addTodo/${currentUser.id}`,
+            body: newTodo
+        });
+
+        console.log("Response from adding todo:", data, status);
+
+        if (status === "SUCCESS") {
             setMessage("Todo added successfully!");
-            setTodos(prev => [...prev, data]);
+            const addedTodo = {
+                id: data.id,
+                user_id: currentUser.id,
+                completed: newTodo.completed,
+                title: newTodo.title,
+            };
+            setTodos(prev => [...prev, addedTodo]);
             setIsAdding(false);
-            setTitle(""); // ניקוי השדות אחרי הוספה
-            setCompleted(false);
         } else {
             setMessage("Failed to add todo.");
         }
-    }    
+    }
+
+   async function handleSort(option) {
+    try {
+        const url = `/todos/getAllTodosByUserId/${currentUser.id}?sortBy=${option}`;
+
+        const { data, status } = await sendRequest({
+            method: 'GET',
+            url
+        });
+
+        if (status === "SUCCESS") {
+            setMessage("Todos sorted successfully!");
+            setTodos(data);
+        } else if (status === "NOT_FOUND") {
+            setMessage("No todos found for sorting.");
+            setTodos([]);
+        } else {
+            setMessage("Failed to sort todos.");
+        }
+    } catch (error) {
+        console.error("Error sorting todos:", error);
+        setMessage("Error occurred while sorting todos.");
+    }
+}
 
     return (
         <div className={styles.todosWrapper}>
@@ -73,13 +105,7 @@ export default function Todos() {
             </header>
 
             <Sort
-                config={{
-                    entity: "todos",
-                    setEntities: setTodos,
-                    setMessage,
-                    currentEntity: currentUser
-                }}
-                sortSelectRef={sortSelectRef}
+                handleSort={(option) => handleSort(option)}
             />
 
             {/* <Search
@@ -88,37 +114,39 @@ export default function Todos() {
                     setEntities: setTodos,
                     setMessage,
                 }}
-                searchUrl={todos/getAllTodosByUserId/${currentUser.id}}
-                fetchUrl={todos/getAllTodosByUserId/${currentUser.id}}
+                searchUrl={`todos/getAllTodosByUserId/${currentUser.id}`}
+                fetchUrl={`todos/getAllTodosByUserId/${currentUser.id}`}
             /> */}
 
-            <Create
-                title={title}      
-                setTitle={setTitle}
-                type="text"
-                isAdding={isAdding}
-                setIsAdding={setIsAdding}
-                handleAdd={handleAddTodo}
-            >
-                <label className={styles.checkboxLabel}>
+            <Create isAdding={isAdding} setIsAdding={setIsAdding} handleAdd={handleAddTodo} >
                 <input
-                    type="checkbox"
-                    className={styles.checkboxInput}
-                    checked={completed}
-                    onChange={e => setCompleted(e.target.checked)}
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Title"
+                    className={styles.textInput}
                 />
+                <label className={styles.checkboxLabel}>
+                    <input
+                        type="checkbox"
+                        className={styles.checkboxInput}
+                        checked={completed}
+                        onChange={e => setCompleted(e.target.checked)}
+                    />
                     <span>Is completed?</span>
                 </label>
             </Create>
 
             <p className={styles.message}>{message}</p>
+
             <ul className={styles.todosList}>
-                {todos.map((todo, index) => (
-                    <Todo key={index} todo={todo} config={{
-                        entity: "todos",
-                        setEntities: setTodos,
-                        setMessage
-                    }} />
+                {todos.map((todo) => (
+                    <Todo
+                        key={todo.id}
+                        todo={todo}
+                        setTodos={setTodos}
+                        setGlobalMessage={setMessage}
+                    />
                 ))}
             </ul>
         </div>

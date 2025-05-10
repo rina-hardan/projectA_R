@@ -45,31 +45,50 @@ const postsController = {
     updatePost: (req, res) => {
         const { post_id } = req.params;
         const { title, content } = req.body;
-    
+
         if (!title && !content) {
             return res.status(400).json({ error: "At least one field (title or content) must be provided" });
         }
-    
+
         postsModel.updatePost(post_id, { title, content }, (err, result) => {
             if (err) {
                 console.error("Error updating the post:", err);
                 return res.status(500).json({ error: "Error updating the post" });
             }
-    
+
             if (result.affectedRows === 0) {
                 return res.status(404).json({ error: "Post not found" });
             }
-    
+
             res.json({ message: "Post updated successfully" });
         });
     },
     deletePost: (req, res) => {
-        const { post_id } = req.params; 
-    
-        postsModel.deletePost(post_id, (err, result) => {
+        const { id } = req.params;
+
+        postsModel.deletePost(id, (err, result) => {
             if (err) return res.status(500).json({ error: "Database error" });
-            if (!result) return res.status(404).json({ error: "No post found" }); 
+            if (!result) return res.status(404).json({ error: "No post found" });
             res.json(result);
+        });
+    },
+     searchPost: (req, res) => {
+        const { type, value } = req.body;
+
+        if (!type || !value) {
+            return res.status(400).json({ message: "Missing type or value" });
+        }
+
+        postsModel.searchPost(type, value, (err, results) => {
+            if (err) {
+                return res.status(500).json({ message: "Database error", error: err.message });
+            }
+
+            if (results.length === 0) {
+                return res.status(404).json({ message: "No comments found" });
+            }
+
+            res.status(200).json(results);
         });
     }
 };

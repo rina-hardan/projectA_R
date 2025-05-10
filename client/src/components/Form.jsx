@@ -6,7 +6,6 @@ export default function Form({ inputFields, formData, setFormData, message, hand
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
-console.log(formData);
     return (
         <div className="form-container">
             {

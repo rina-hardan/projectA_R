@@ -26,37 +26,43 @@ export default function Register() {
     const navigate = useNavigate();
 
     async function handleFormSubmitted() {
-        if (Object.values(formData).some(value => value.trim() === "")) {
+        const { name, username, email, password } = formData;
+
+        if (!name.trim() || !username.trim() || !email.trim() || !password.trim()) {
             setMessage("Please fill all the details");
             return;
         }
 
-        const newUser = {
-            name: formData.name,
-            username: formData.username,
-            email: formData.email,
-            password: formData.password
-        };
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            setMessage("Invalid email address");
+            return;
+        }
 
+        if (password.length < 5) {
+            setMessage("Password must be at least 6 characters long");
+            return;
+        }
+
+        const newUser = { name, username, email, password };
 
         const { data, status } = await sendRequest({
             method: 'POST',
             url: '/users/register',
             body: newUser,
         });
+
         if (status === FAILED) {
             setMessage("Failed to register user.");
             return;
         }
-        console.log(data);
-        console.log(status);
+
         const fullUserData = { ...newUser, id: data.userId };
         localStorage.setItem("currentUser", JSON.stringify(fullUserData));
         setCurrentUser(fullUserData);
         navigate(`/users/${data.username}/Home`);
     }
 
-    console.log(formData)
     return (
         <div className="register-container">
             <h1>FullRegister</h1>
