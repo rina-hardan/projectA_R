@@ -36,15 +36,26 @@ const commentsController = {
         });
     },
 
-    deleteComment: (req, res) => {
-        const { commentId } = req.params;
-        commentsModel.deleteComment(commentId, (err, result) => {
-            if (err) return res.status(500).json({ error: "Database error" });
-            if (!result) return res.status(404).json({ error: "No comments found for this user" });
+   deleteComment: (req, res) => {
+    const { commentId } = req.params;
+    const { email } = req.body;
 
-            res.json(result);
+    if (!email) return res.status(400).json({ error: "Email is required for authorization" });
+
+    commentsModel.getCommentById(commentId, (err, existingComment) => {
+        if (err) return res.status(500).json({ error: "Database error" });
+        if (!existingComment) return res.status(404).json({ error: "Comment not found" });
+
+        if (existingComment.email !== email) {
+            return res.status(403).json({ error: "You are not authorized to delete this comment" });
+        }
+
+        commentsModel.deleteComment(commentId, (err, result) => {
+            if (err) return res.status(500).json({ error: "Failed to delete comment" });
+            res.json({ message: "Comment deleted successfully" });
         });
-    },
+    });
+},
     updateComment: (req, res) => {
         const { commentId } = req.params;
         const { email, ...updateFields } = req.body;

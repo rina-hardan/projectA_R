@@ -10,12 +10,13 @@ export default function Comment({ comment, setComments,setMessage }) {
     const fieldNames = ["name", "body"];
     async function handleDeleteComments(commentId) {
     try {
-        const { status } = await sendRequest({
-            method: "DELETE",
-            url: `/comments/deleteComment/${comment.id}`,
-            body:{},
-        });
-
+          const { status } = await sendRequest({
+                method: "DELETE",
+                url: `/comments/deleteComment/${comment.id}`,
+                body: {
+                    email: currentUser.email 
+                },
+            });
         if (status === 'SUCCESS') {
            setMessage(`comment deleted successfully!`);
             setComments(prev => prev.filter(comment => comment.id !== commentId));

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useContext } from "react";
 import { CurrentUserContext } from '../App';
 import Sort from "./Sort.jsx";
- import Search from "./Search.jsx";
+import Search from "./Search.jsx";
 import Create from "./Create.jsx";
 import useMessage from "../hooks/useMessage.jsx";
 import { SUCCESS, NOT_FOUND, FAILED, sendRequest } from '../DB_API.jsx';
@@ -74,32 +74,32 @@ export default function Todos() {
         }
     }
 
-   async function handleSort(option) {
-    try {
-        const url = `/todos/getAllTodosByUserId/${currentUser.id}?sortBy=${option}`;
+    async function handleSort(option) {
+        try {
+            const url = `/todos/getAllTodosByUserId/${currentUser.id}?sortBy=${option}`;
 
+            const { data, status } = await sendRequest({
+                method: 'GET',
+                url
+            });
+
+            if (status === "SUCCESS") {
+                setMessage("Todos sorted successfully!");
+                setTodos(data);
+            } else if (status === "NOT_FOUND") {
+                setMessage("No todos found for sorting.");
+                setTodos([]);
+            } else {
+                setMessage("Failed to sort todos.");
+            }
+        } catch (error) {
+            console.error("Error sorting todos:", error);
+            setMessage("Error occurred while sorting todos.");
+        }
+    }
+    async function handleSearchTodos(fullUrl) {
         const { data, status } = await sendRequest({
             method: 'GET',
-            url
-        });
-
-        if (status === "SUCCESS") {
-            setMessage("Todos sorted successfully!");
-            setTodos(data);
-        } else if (status === "NOT_FOUND") {
-            setMessage("No todos found for sorting.");
-            setTodos([]);
-        } else {
-            setMessage("Failed to sort todos.");
-        }
-    } catch (error) {
-        console.error("Error sorting todos:", error);
-        setMessage("Error occurred while sorting todos.");
-    }
-}
- async function handleSearchTodos(fullUrl) {
-        const { data, status } = await sendRequest({
-            method: 'POST',
             url: fullUrl,
             body: {},
         });
@@ -125,12 +125,12 @@ export default function Todos() {
             />
 
             <Search
-                        entity={"todos"}
+                entity={"todos"}
                 fetch={(searchUrl) => fetchTodos(searchUrl)}
                 searchUrl={`todos/search/${currentUser.id}`}
-                fetchUrl={ `/todos/getAllTodosByUserId/${currentUser.id}`}
-                handleSearch={(fullUrl)=>handleSearchTodos(fullUrl)}
-                fetchEntities={fetchTodos}  
+                fetchUrl={`/todos/getAllTodosByUserId/${currentUser.id}`}
+                handleSearch={(fullUrl) => handleSearchTodos(fullUrl)}
+                fetchEntities={fetchTodos}
             />
 
             <Create isAdding={isAdding} setIsAdding={setIsAdding} handleAdd={handleAddTodo} >

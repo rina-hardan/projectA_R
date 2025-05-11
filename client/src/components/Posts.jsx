@@ -69,7 +69,7 @@ export default function Posts() {
     };
  async function handleSearchPosts( url) {
     const { data, status } = await sendRequest({
-        method: 'POST',
+        method: 'GET',
         url,
         body:{},
     });
