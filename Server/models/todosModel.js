@@ -58,7 +58,29 @@ const todosModel = {
             if (err) return callback(err);
             callback(null, result);
         });
+    },
+   searchTodos: (userId, filterBy, value, callback) => {
+    let sql = "";
+    let params = [];
+
+    if (filterBy === "id") {
+        sql = "SELECT * FROM todos WHERE user_id = ? AND id = ?";
+        params = [userId, value];
+    } else if (filterBy === "title") {
+        sql = "SELECT * FROM todos WHERE user_id = ? AND title LIKE ?";
+        params = [userId, `%${value}%`];
+    } else if (filterBy === "completed") {
+        sql = "SELECT * FROM todos WHERE user_id = ? AND completed = ?";
+        params = [userId, value === "true" ? 1 : 0];
+    } else {
+        return callback(null, []);
     }
+
+    DB.query(sql, params, (err, results) => {
+        if (err) return callback(err);
+        callback(null, results);
+    });
+}
 };
 
 export default todosModel;

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useContext } from "react";
 import { CurrentUserContext } from '../App';
 import Sort from "./Sort.jsx";
-// import Search from "./Search.jsx";
+ import Search from "./Search.jsx";
 import Create from "./Create.jsx";
 import useMessage from "../hooks/useMessage.jsx";
 import { SUCCESS, NOT_FOUND, FAILED, sendRequest } from '../DB_API.jsx';
@@ -97,7 +97,23 @@ export default function Todos() {
         setMessage("Error occurred while sorting todos.");
     }
 }
+ async function handleSearchTodos(fullUrl) {
+        const { data, status } = await sendRequest({
+            method: 'POST',
+            url: fullUrl,
+            body: {},
+        });
 
+        if (status === 'SUCCESS') {
+            setMessage("Todos found successfully.");
+            setTodos(data);
+        } else if (status === 'NOT_FOUND') {
+            setMessage("No todos found.");
+            setTodos([]);
+        } else {
+            setMessage("Failed to search todos.");
+        }
+    }
     return (
         <div className={styles.todosWrapper}>
             <header>
@@ -108,15 +124,14 @@ export default function Todos() {
                 handleSort={(option) => handleSort(option)}
             />
 
-            {/* <Search
-                config={{
-                    entity: "todos",
-                    setEntities: setTodos,
-                    setMessage,
-                }}
-                searchUrl={`todos/getAllTodosByUserId/${currentUser.id}`}
-                fetchUrl={`todos/getAllTodosByUserId/${currentUser.id}`}
-            /> */}
+            <Search
+                        entity={"todos"}
+                fetch={(searchUrl) => fetchTodos(searchUrl)}
+                searchUrl={`todos/search/${currentUser.id}`}
+                fetchUrl={ `/todos/getAllTodosByUserId/${currentUser.id}`}
+                handleSearch={(fullUrl)=>handleSearchTodos(fullUrl)}
+                fetchEntities={fetchTodos}  
+            />
 
             <Create isAdding={isAdding} setIsAdding={setIsAdding} handleAdd={handleAddTodo} >
                 <input

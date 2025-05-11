@@ -57,20 +57,25 @@ const postsModel = {
             }
         );
     },
-   searchPost: (type, value, callback) => {
-        const allowedTypes = ["post_id", "user_id"];
+   searchPosts :(userId, filterBy, value, callback) => {
+    let sql = "";
+    let params = [];
 
-        if (!allowedTypes.includes(type)) {
-            return callback(new Error("Invalid search type"));
-        }
-
-        const sql = `SELECT * FROM comments WHERE ${type} = ?`;
-
-        DB.query(sql, [value], (err, results) => {
-            if (err) return callback(err);
-            callback(null, results);
-        });
+    if (filterBy === "id") {
+        sql = "SELECT * FROM posts WHERE user_id = ? AND id = ?";
+        params = [userId, value];
+    } else if (filterBy === "title") {
+        sql = "SELECT * FROM posts WHERE user_id = ? AND title LIKE ?";
+        params = [userId, `%${value}%`];
+    } else {
+        return callback(null, []); 
     }
+
+    DB.query(sql, params, (err, results) => {
+        if (err) return callback(err);
+        callback(null, results);
+    });
+}
 };
     
 

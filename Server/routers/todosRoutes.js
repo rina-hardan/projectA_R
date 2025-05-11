@@ -7,5 +7,6 @@ todoRouter.get("/getAllTodosByUserId/:user_id", todosController.getAllTodosByUse
 todoRouter.post("/addTodo/:user_id", todosController.addTodo);
 todoRouter.delete("/deleteTodo/:id", todosController.deleteTodo);
 todoRouter.put("/updateTodo/:todo_id", todosController.updateTodo);
+todoRouter.post("/search/:userId", todosController.searchTodos);
 
 export default todoRouter;

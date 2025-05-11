@@ -72,23 +72,25 @@ const postsController = {
             res.json(result);
         });
     },
-     searchPost: (req, res) => {
-        const { type, value } = req.body;
+    searchPosts: (req, res) => {
+        const userId = req.params.userId;
+        const { filterBy, value } = req.query;
 
-        if (!type || !value) {
-            return res.status(400).json({ message: "Missing type or value" });
+        if (!filterBy || !value) {
+            return res.status(400).json({ error: "Missing search parameters" });
         }
 
-        postsModel.searchPost(type, value, (err, results) => {
+        postsModel.searchPosts(userId, filterBy, value, (err, posts) => {
             if (err) {
-                return res.status(500).json({ message: "Database error", error: err.message });
+                console.error("Error searching posts:", err);
+                return res.status(500).json({ error: "Failed to search posts" });
             }
 
-            if (results.length === 0) {
-                return res.status(404).json({ message: "No comments found" });
+            if (posts.length === 0) {
+                return res.status(404).json({ message: "No posts found" });
             }
 
-            res.status(200).json(results);
+            res.status(200).json(posts);
         });
     }
 };

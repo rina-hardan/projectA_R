@@ -3,7 +3,7 @@ import todosModel from "../models/todosModel.js";
 const todosController = {
     getAllTodosByUserId: (req, res) => {
         const { user_id } = req.params;
-        const { sortBy } = req.query; // קבלת הפרמטר sortBy מתוך ה-query
+        const { sortBy } = req.query; 
 
         todosModel.getAllTodosByUserId(user_id, sortBy, (err, todos) => {
             if (err) return res.status(500).json({ error: "Database error" });
@@ -60,6 +60,27 @@ const todosController = {
             res.json({ message: "Todo updated successfully" });
         });
     },
+  searchTodos: (req, res) => {
+    const userId = req.params.userId;
+    const { filterBy, value } = req.query;
+
+    if (!filterBy || value === undefined) {
+        return res.status(400).json({ error: "Missing search parameters" });
+    }
+
+    todosModel.searchTodos(userId, filterBy, value, (err, todos) => {
+        if (err) {
+            console.error("Error searching todos:", err);
+            return res.status(500).json({ error: "Failed to search todos" });
+        }
+
+        if (todos.length === 0) {
+            return res.status(404).json({ message: "No todos found" });
+        }
+
+        res.status(200).json(todos);
+    });
+}
 };
 
 export default todosController;

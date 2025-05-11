@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import { CurrentUserContext } from '../App';
 import Post from './Post';
+import Search from './Search.jsx';
 import Create from './Create.jsx';
 import styles from "../CSS/Posts.module.css";
 import useMessage from '../hooks/useMessage.jsx';
@@ -54,19 +55,35 @@ export default function Posts() {
         setTitle("");
         setContent("");
         const postAdded = {
-           user_id:currentUser.id,
+            user_id: currentUser.id,
             title,
             content: content,
-            id:data.id
+            id: data.id
         };
         if (!isAllPosts) {
-            setPosts(prevPosts => [postAdded, ...prevPosts]); 
+            setPosts(prevPosts => [postAdded, ...prevPosts]);
         }
         else {
             fetchPosts(`posts/getAllPosts`);
         }
     };
+ async function handleSearchPosts( url) {
+    const { data, status } = await sendRequest({
+        method: 'POST',
+        url,
+        body:{},
+    });
 
+    if (status === 'SUCCESS') {
+        setMessage("Post search completed successfully.");
+        setPosts(data);
+    } else if (status === 'NOT_FOUND') {
+        setMessage("No posts found.");
+        setPosts([]);
+    } else {
+        setMessage("Failed to search posts.");
+    }
+}
     useEffect(() => {
         fetchPosts(`posts/getPostsByUserId/${currentUser.id}`);
     }, []);
@@ -98,11 +115,15 @@ export default function Posts() {
                 )}
             </div>
 
-            {/* <Search
+            <Search
+
+                    entity={"posts"}
                 fetch={(searchUrl) => fetchPosts(searchUrl)}
-                searchUrl={isAllPosts ? `posts/getAllPosts` : `posts/getPostsByUserId/${currentUser.id}`}
+                searchUrl={isAllPosts ? `posts/getAllPosts` : `posts/search/${currentUser.id}`}
                 fetchUrl={isAllPosts ? `posts/getAllPosts` : `posts/getPostsByUserId/${currentUser.id}`}
-            /> */}
+                handleSearch={(fullUrl)=>handleSearchPosts(fullUrl)}
+                fetchEntities={fetchPosts}
+            />
             <Create isAdding={isAdding} setIsAdding={setIsAdding} handleAdd={handleAdd}>
                 <input
                     type="text"
@@ -124,7 +145,7 @@ export default function Posts() {
             <div className={styles.postsList}>
                 {posts &&
                     posts.map((post, i) => (
-                        <Post key={post.id} post={post} setPosts={setPosts} isAllPosts={isAllPosts}  setGlobalMessage={setMessage} />
+                        <Post key={post.id} post={post} setPosts={setPosts} isAllPosts={isAllPosts} setGlobalMessage={setMessage} />
                     ))}
             </div>
         </div>
